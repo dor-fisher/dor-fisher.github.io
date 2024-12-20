@@ -1,9 +1,14 @@
 body {
-    background-color:moccasin;
+    background-color:rgb(239,233,225);
 }
 h1 {
-    color:blueviolet;
+    color:rgb(164,149,183);
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font:bold;
+    font-size: 2em;
 }
 p {
-    color:aliceblue;
+    color:rgb(158,121,103);
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 1em;;
 }

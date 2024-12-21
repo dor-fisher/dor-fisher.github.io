@@ -19,7 +19,9 @@ body {
     background-color: white;
     margin: 0px;
 }
-
+.main {
+    padding: 10px;
+}
 h1 {
     color: rgb(164, 149, 183);
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;

@@ -11,11 +11,12 @@
 .topline {
     background-color: rgb(239, 233, 225);
     height: 20px;
+    margin:0px;
+    border: 0px;
 }
 
 body {
     background-color: white;
-    padding: 0px;
 }
 
 h1 {

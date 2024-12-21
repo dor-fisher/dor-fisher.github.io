@@ -1,6 +1,15 @@
 * {
     box-sizing: border-box;
   }
+.header {
+    text-align: center;
+    padding: 30px;
+    background-color:white;
+}
+.topline{
+    background-color:rgb(239,233,225);
+    height: 20px;
+}
 body {
     background-color:white;
 }
@@ -14,11 +23,4 @@ p {
     color:rgb(150,120,100);
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 1em;
-}
-.header {
-    margin: 0px;
-    border-radius: 15px 15px 0px 0px;
-    text-align: center;
-    padding: 30px;
-    background-color:rgb(239,233,225);
 }

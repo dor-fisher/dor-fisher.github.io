@@ -39,13 +39,13 @@ h3 {
 }
 
 p {
-  color: rgb(150, 120, 100);
+  color: rgb(239, 233, 225);
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-size: 1em;
 }
 
 ul {
-  color: rgb(150, 120, 100);
+  color: rgb(239, 233, 225);
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-size: 1em;
 }
@@ -53,7 +53,7 @@ ul {
 input[type=text], textarea {
   width: 100%;
   padding: 12px;
-  border: 1px solid #ccc;
+  border: 1px solid rgb(164, 149, 183);
   border-radius: 4px;
   resize: vertical;
 }

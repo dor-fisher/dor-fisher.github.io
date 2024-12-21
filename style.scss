@@ -1,4 +1,4 @@
-$maincolor: rgb(239, 233, 225);
+$primary-color: rgb(239, 233, 225);
 
 * {
     box-sizing: border-box;
@@ -11,7 +11,7 @@ $maincolor: rgb(239, 233, 225);
 }
 
 .topline {
-    background-color: $maincolor;
+    background-color: $primary-color;
     height: 20px;
     margin:0px;
     border: 0px;

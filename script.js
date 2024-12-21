@@ -13,7 +13,7 @@ function displayHistory(history) {
     const list = document.createElement('ul');
     list.className = 'history-list';
     
-    history.forEach(entry => {
+    history.slice(1).forEach(entry => {
         const item = document.createElement('li');
         item.textContent = `${entry.content} (${formatDate(entry.timestamp)})`;
         list.appendChild(item);

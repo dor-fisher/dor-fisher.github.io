@@ -1,0 +1,75 @@
+* {
+  box-sizing: border-box;
+}
+
+.header {
+  text-align: center;
+  padding: 30px;
+  background-color: white;
+}
+
+.topline {
+  background-color: rgb(239, 233, 225);
+  height: 20px;
+  margin: 0px;
+  border: 0px;
+}
+
+body {
+  background-color: white;
+  margin: 0px;
+}
+
+.main {
+  padding: 10px;
+}
+
+h1 {
+  color: rgb(164, 149, 183);
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font: bold;
+  font-size: 2em;
+}
+
+h3 {
+  color: rgb(164, 149, 183);
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font: bold;
+  font-size: 1.3em;
+}
+
+p {
+  color: rgb(150, 120, 100);
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 1em;
+}
+
+ul {
+  color: rgb(150, 120, 100);
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 1em;
+}
+
+input[type=text], textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+}
+
+label {
+  padding: 12px 12px 12px 0;
+  display: inline-block;
+}
+
+@media only screen and (max-width: 400px) {
+  h1 {
+    font-size: 50px;
+  }
+  .topline {
+    display: none;
+  }
+}
+
+/*# sourceMappingURL=style.css.map */

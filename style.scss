@@ -1,5 +1,6 @@
 $primary-color: rgb(239, 233, 225);
 $secondary-color: rgb(164, 149, 183);
+$third-color: rgb(150,120,100);
 
 * {
     box-sizing: border-box;
@@ -26,7 +27,7 @@ body {
     padding: 10px;
 }
 h1 {
-    color: rgb(164, 149, 183);
+    color: $primary-color;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     font: bold;
     font-size: 2em;
@@ -38,12 +39,12 @@ h3 {
     font-size: 1.3em;
 }
 p {
-    color: $primary-color;
+    color: $third-color;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 1em;
 }
 ul {
-    color: $primary-color;
+    color: $third-color;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 1em;
 }
@@ -56,6 +57,7 @@ input[type=text], textarea {
   }
   
   label {
+    color: $third-color;
     padding: 12px 12px 12px 0;
     display: inline-block;
   }

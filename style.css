@@ -16,6 +16,7 @@ p {
     font-size: 1em;
 }
 .header {
+    border-radius: 15px 15px 0px 0px;
     text-align: center;
     padding: 30px;
     background-color:rgb(239,233,225);

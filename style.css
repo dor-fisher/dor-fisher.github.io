@@ -28,8 +28,18 @@ h1 {
     font: bold;
     font-size: 2em;
 }
-
+h3 {
+    color: rgb(164, 149, 183);
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font: bold;
+    font-size: 1.3em;
+}
 p {
+    color: rgb(150, 120, 100);
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 1em;
+}
+ul {
     color: rgb(150, 120, 100);
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 1em;

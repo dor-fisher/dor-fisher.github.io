@@ -1,3 +1,5 @@
+$maincolor: rgb(239, 233, 225);
+
 * {
     box-sizing: border-box;
 }
@@ -9,7 +11,7 @@
 }
 
 .topline {
-    background-color: rgb(239, 233, 225);
+    background-color:$maincolor;
     height: 20px;
     margin:0px;
     border: 0px;
@@ -44,7 +46,18 @@ ul {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 1em;
 }
-
+input[type=text], textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+  }
+  
+  label {
+    padding: 12px 12px 12px 0;
+    display: inline-block;
+  }
 @media only screen and (max-width: 400px) {
     h1 {
         font-size: 50px;

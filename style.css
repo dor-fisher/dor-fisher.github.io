@@ -17,5 +17,6 @@ p {
 }
 .header {
     text-align: center;
+    padding: 30px;
     background-color:rgb(239,233,225);
 }

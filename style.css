@@ -1,34 +1,41 @@
 * {
     box-sizing: border-box;
-  }
+}
+
 .header {
     text-align: center;
     padding: 30px;
-    background-color:white;
+    background-color: white;
 }
-.topline{
-    background-color:rgb(239,233,225);
+
+.topline {
+    background-color: rgb(239, 233, 225);
     height: 20px;
 }
+
 body {
-    background-color:white;
+    background-color: white;
 }
+
 h1 {
-    color:rgb(164, 149, 183);
+    color: rgb(164, 149, 183);
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-    font:bold;
+    font: bold;
     font-size: 2em;
 }
+
 p {
-    color:rgb(150,120,100);
+    color: rgb(150, 120, 100);
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 1em;
 }
+
 @media only screen and (max-width: 400px) {
     h1 {
-      font-size: 50px;
+        font-size: 50px;
     }
-    .topline{
+
+    .topline {
         display: none;
     }
-  }
+}

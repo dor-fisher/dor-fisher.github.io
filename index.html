@@ -4,6 +4,17 @@
     <link rel="stylesheet" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="script.js"></script>
+    <style>
+        .history-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .history-list li {
+            margin: 10px 0;
+            padding: 5px;
+            border-bottom: 1px solid #eee;
+        }
+    </style>
 </head>
 <body>
     <div class="header">
@@ -12,12 +23,12 @@
     <div class="topline"></div>
     <div class="main">
         <p>Loading content...</p>
-        <!-- Remove the action attribute and update the form ID -->
         <form id="updateForm" onsubmit="handleSubmit(event)">
             <label for="content">Input:</label><br>
             <input type="text" id="content" name="content"><br>
             <button type="submit">Submit</button>
         </form>
+        <div id="history"></div>
     </div>
 </body>
 </html>

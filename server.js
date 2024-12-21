@@ -1,4 +1,3 @@
-// server.js
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs').promises;
@@ -18,7 +17,10 @@ app.get('/api/content', async (req, res) => {
     } catch (error) {
         if (error.code === 'ENOENT') {
             // If file doesn't exist, create it with default content
-            const defaultData = { content: "I'm hosted with GitHub Pages." };
+            const defaultData = {
+                currentContent: "I'm hosted with GitHub Pages.",
+                history: []
+            };
             await fs.writeFile('data.json', JSON.stringify(defaultData));
             res.json(defaultData);
         } else {
@@ -31,7 +33,30 @@ app.get('/api/content', async (req, res) => {
 app.post('/api/content', async (req, res) => {
     try {
         const { content } = req.body;
-        const data = { content };
+        let data;
+        
+        try {
+            const fileContent = await fs.readFile('data.json', 'utf8');
+            data = JSON.parse(fileContent);
+        } catch (error) {
+            data = { currentContent: "", history: [] };
+        }
+
+        // Create new entry
+        const newEntry = {
+            content: content,
+            timestamp: new Date().toISOString()
+        };
+
+        // Update the current content and add to history
+        data.currentContent = content;
+        data.history.unshift(newEntry); // Add to start of array
+        
+        // Keep only the last 10 entries
+        if (data.history.length > 10) {
+            data.history = data.history.slice(0, 10);
+        }
+
         await fs.writeFile('data.json', JSON.stringify(data));
         res.json(data);
     } catch (error) {

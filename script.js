@@ -1,10 +1,36 @@
 const API_URL = 'https://laughable-news-production.up.railway.app';
 
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleString();
+}
+
+function displayHistory(history) {
+    const historyDiv = document.getElementById('history');
+    if (!historyDiv) return;
+
+    historyDiv.innerHTML = '<h3>History:</h3>';
+    const list = document.createElement('ul');
+    list.className = 'history-list';
+    
+    history.forEach(entry => {
+        const item = document.createElement('li');
+        item.textContent = `${entry.content} (${formatDate(entry.timestamp)})`;
+        list.appendChild(item);
+    });
+    
+    historyDiv.appendChild(list);
+}
+
 async function loadContent() {
     try {
         const response = await fetch(`${API_URL}/api/content`);
         const data = await response.json();
-        document.querySelector('.main p').textContent = data.content;
+        document.querySelector('.main p').textContent = data.currentContent;
+        
+        if (data.history) {
+            displayHistory(data.history);
+        }
     } catch (error) {
         console.error('Error loading content:', error);
     }
@@ -24,7 +50,11 @@ async function handleSubmit(event) {
         });
         
         if (response.ok) {
-            loadContent(); // Refresh the content
+            const data = await response.json();
+            document.querySelector('.main p').textContent = data.currentContent;
+            if (data.history) {
+                displayHistory(data.history);
+            }
             document.getElementById('content').value = ''; // Clear the input
         }
     } catch (error) {

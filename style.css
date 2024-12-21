@@ -16,6 +16,7 @@ p {
     font-size: 1em;
 }
 .header {
+    margin: 0px;
     border-radius: 15px 15px 0px 0px;
     text-align: center;
     padding: 30px;

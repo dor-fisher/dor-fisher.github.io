@@ -1,6 +1,6 @@
 $primary-color: rgb(239, 233, 225);
 $secondary-color: rgb(164, 149, 183);
-$third-color: rgb(150,120,100);
+$third-color: rgb(150, 120, 100);
 
 * {
     box-sizing: border-box;
@@ -15,7 +15,7 @@ $third-color: rgb(150,120,100);
 .topline {
     background-color: $primary-color;
     height: 20px;
-    margin:0px;
+    margin: 0px;
     border: 0px;
 }
 
@@ -23,44 +23,68 @@ body {
     background-color: white;
     margin: 0px;
 }
+
 .main {
     padding: 10px;
+    float: left;
+    width: 50%;
 }
+
 h1 {
     color: $secondary-color;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     font: bold;
     font-size: 2em;
 }
+
 h3 {
     color: $secondary-color;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     font: bold;
     font-size: 1.3em;
 }
+
 p {
     color: $third-color;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 1em;
 }
+
 ul {
     color: $third-color;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 1em;
 }
-input[type=text], textarea {
+
+input[type=text],
+textarea {
     width: 100%;
     padding: 12px;
     border: 1px solid $secondary-color;
     border-radius: 4px;
     resize: vertical;
-  }
-  
-  label {
+}
+
+label {
     color: $third-color;
     padding: 12px 12px 12px 0;
     display: inline-block;
-  }
+}
+.history {
+    float: left;
+    width: 25%;
+}
+.history-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.history-list li {
+    margin: 10px 0;
+    padding: 5px;
+    border-bottom: 1px solid #eee;
+}
+
 @media only screen and (max-width: 400px) {
     h1 {
         font-size: 50px;

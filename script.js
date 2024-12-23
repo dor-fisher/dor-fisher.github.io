@@ -26,8 +26,8 @@ async function loadContent() {
     try {
         const response = await fetch(`${API_URL}/api/content`);
         const data = await response.json();
-        document.querySelector('.main p').textContent = data.currentContent;
-        
+        document.querySelector('#contentH').textContent = data.currentContent;
+        document.querySelector('#contentP').textContent = data.userMessage;
         if (data.history) {
             displayHistory(data.history);
         }

@@ -22,6 +22,8 @@ body {
 
 .main {
   padding: 10px;
+  float: left;
+  width: 50%;
 }
 
 h1 {
@@ -50,7 +52,8 @@ ul {
   font-size: 1em;
 }
 
-input[type=text], textarea {
+input[type=text],
+textarea {
   width: 100%;
   padding: 12px;
   border: 1px solid rgb(164, 149, 183);
@@ -62,6 +65,22 @@ label {
   color: rgb(150, 120, 100);
   padding: 12px 12px 12px 0;
   display: inline-block;
+}
+
+.history {
+  float: left;
+  width: 25%;
+}
+
+.history-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.history-list li {
+  margin: 10px 0;
+  padding: 5px;
+  border-bottom: 1px solid #eee;
 }
 
 @media only screen and (max-width: 400px) {

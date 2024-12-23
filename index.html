@@ -4,17 +4,6 @@
     <link rel="stylesheet" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="script.js"></script>
-    <style>
-        .history-list {
-            list-style-type: none;
-            padding: 0;
-        }
-        .history-list li {
-            margin: 10px 0;
-            padding: 5px;
-            border-bottom: 1px solid #eee;
-        }
-    </style>
 </head>
 <body>
     <div class="header">
@@ -22,7 +11,8 @@
     </div>
     <div class="topline"></div>
     <div class="main">
-        <p>Loading content...</p>
+        <h3 id="contentH"></h3>
+        <p id="contentP">Loading content...</p>
         <form id="updateForm" onsubmit="handleSubmit(event)">
             <label for="content">Title:</label><br>
             <input type="text" id="content" name="content"><br>

@@ -64,8 +64,9 @@ app.get('/api/content', async (req, res) => {
 // Route to update content
 app.post('/api/content', async (req, res) => {
     try {
-        const { content } = req.body;
+        const { content, userMessage } = req.body;
         console.log('Received new content:', content);
+        console.log('Received user message:', userMessage);
         
         let data;
         try {
@@ -78,10 +79,12 @@ app.post('/api/content', async (req, res) => {
 
         const newEntry = {
             content: content,
+            userMessage: userMessage,
             timestamp: new Date().toISOString()
         };
 
         data.currentContent = content;
+        data.userMessage = userMessage;
         data.history.unshift(newEntry);
         
         if (data.history.length > 10) {

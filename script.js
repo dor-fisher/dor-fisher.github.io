@@ -15,7 +15,7 @@ function displayHistory(history) {
     
     history.slice(1).forEach(entry => {
         const item = document.createElement('li');
-        item.textContent = `${entry.content} (${formatDate(entry.timestamp)})`;
+        item.textContent = `${entry.content} | Message: ${entry.userMessage} (${formatDate(entry.timestamp)})`;
         list.appendChild(item);
     });
     
@@ -39,14 +39,14 @@ async function loadContent() {
 async function handleSubmit(event) {
     event.preventDefault();
     const content = document.getElementById('content').value;
-    
+    const userMessage = document.getElementById('userMessage').value;
     try {
         const response = await fetch(`${API_URL}/api/content`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ content }),
+            body: JSON.stringify({ content , userMessage}),
         });
         
         if (response.ok) {
@@ -56,9 +56,11 @@ async function handleSubmit(event) {
                 displayHistory(data.history);
             }
             document.getElementById('content').value = ''; // Clear the input
+            document.getElementById('userMessage').value = '';
         }
     } catch (error) {
         console.error('Error updating content:', error);
+        
     }
 }
 

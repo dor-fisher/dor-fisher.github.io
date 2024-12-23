@@ -80,7 +80,6 @@ label {
 .history-list li {
   margin: 10px 0;
   padding: 5px;
-  border-bottom: 1px solid #eee;
 }
 
 @media only screen and (max-width: 400px) {

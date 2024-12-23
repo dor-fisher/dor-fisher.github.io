@@ -12,13 +12,13 @@ function displayHistory(history) {
     historyDiv.innerHTML = '<h3>History:</h3>';
     const list = document.createElement('ul');
     list.className = 'history-list';
-    
+
     history.slice(1).forEach(entry => {
         const item = document.createElement('li');
         item.textContent = `${entry.content} | Message: ${entry.userMessage} (${formatDate(entry.timestamp)})`;
         list.appendChild(item);
     });
-    
+
     historyDiv.appendChild(list);
 }
 
@@ -46,12 +46,13 @@ async function handleSubmit(event) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ content , userMessage}),
+            body: JSON.stringify({ content, userMessage }),
         });
-        
+
         if (response.ok) {
             const data = await response.json();
-            document.querySelector('.main p').textContent = data.currentContent;
+            document.querySelector('#contentH').textContent = data.currentContent;
+            document.querySelector('#contentP').textContent = data.userMessage;
             if (data.history) {
                 displayHistory(data.history);
             }
@@ -60,7 +61,7 @@ async function handleSubmit(event) {
         }
     } catch (error) {
         console.error('Error updating content:', error);
-        
+
     }
 }
 

@@ -10,52 +10,38 @@
 <body>
     <div class="header">
         <h1>Message Board</h1>
-        <p class="subtitle">Share your thoughts with others</p>
     </div>
+    <div class="topline"></div>
     
     <div class="container">
-        <div class="current-content">
-            <div class="content-card">
-                <h2 id="contentH">Loading...</h2>
-                <p id="contentP" class="message-text">Loading content...</p>
-            </div>
-        </div>
-
+        <!-- Form Column -->
         <div class="form-section">
             <h3>Create New Post</h3>
-            <form id="updateForm" onsubmit="handleSubmit(event)" class="input-form">
-                <div class="form-group">
-                    <label for="content">Title</label>
-                    <input type="text" 
-                           id="content" 
-                           name="content" 
-                           placeholder="Enter a title"
-                           required
-                           maxlength="100">
-                </div>
-
-                <div class="form-group">
-                    <label for="userMessage">Message</label>
-                    <textarea 
-                        name="message" 
-                        id="userMessage" 
-                        rows="4" 
-                        placeholder="What's on your mind?"
-                        required
-                        maxlength="500"></textarea>
-                    <span class="char-counter" id="messageCounter">0/500</span>
-                </div>
-
-                <button type="submit" class="submit-btn">
-                    Post Message
-                </button>
+            <form id="updateForm" onsubmit="handleSubmit(event)">
+                <label for="content">Title:</label>
+                <input type="text" id="content" name="content" required>
+                
+                <label for="userMessage">Message:</label>
+                <textarea name="message" id="userMessage" rows="4" 
+                    placeholder="Enter your message here..." required></textarea>
+                
+                <button type="submit">Post Message</button>
             </form>
         </div>
 
-        <div class="history-section">
+        <!-- Main Post Column -->
+        <div class="main">
+            <div class="post-card">
+                <h3 id="contentH"></h3>
+                <p id="contentP">Loading content...</p>
+            </div>
+        </div>
+
+        <!-- History Column -->
+        <div class="history">
             <h3>Previous Messages</h3>
-            <div id="history" class="history-container">
-                <!-- History content will be inserted here -->
+            <div id="history" class="history-list">
+                <!-- History items will be inserted here -->
             </div>
         </div>
     </div>

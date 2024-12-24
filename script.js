@@ -28,22 +28,43 @@ function createElement(tag, className, textContent) {
 }
 
 // Display functions
-function displayHistory(history = []) {
-    const historyDiv = document.querySelector(ELEMENTS.history);
+function displayHistory(history) {
+    const historyDiv = document.getElementById('history');
     if (!historyDiv) return;
 
-    historyDiv.innerHTML = '<h3>History:</h3>';
-    const list = createElement('ul', 'history-list');
+    historyDiv.innerHTML = '';
+    const list = document.createElement('ul');
+    list.className = 'history-list';
 
     history.slice(1).forEach(entry => {
-        const item = createElement('li');
-        item.textContent = `${entry.content || 'No content'} | Message: ${entry.userMessage || 'No message'} (${formatDate(entry.timestamp)})`;
+        const item = document.createElement('li');
+        
+        // Create title div
+        const titleDiv = document.createElement('div');
+        titleDiv.className = 'history-title';
+        titleDiv.textContent = entry.content;
+        
+        // Create message div with truncated text
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'history-message';
+        const words = entry.userMessage.split(' ');
+        messageDiv.textContent = words.slice(0, 3).join(' ') + (words.length > 3 ? '...' : '');
+        
+        // Create timestamp div
+        const timestampDiv = document.createElement('div');
+        timestampDiv.className = 'history-timestamp';
+        timestampDiv.textContent = formatDate(entry.timestamp);
+        
+        // Append all elements
+        item.appendChild(titleDiv);
+        item.appendChild(messageDiv);
+        item.appendChild(timestampDiv);
+        
         list.appendChild(item);
     });
 
     historyDiv.appendChild(list);
 }
-
 function updatePageContent(data) {
     const contentHeader = document.querySelector(ELEMENTS.contentHeader);
     const contentParagraph = document.querySelector(ELEMENTS.contentParagraph);

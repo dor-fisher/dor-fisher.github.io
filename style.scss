@@ -1,95 +1,208 @@
+// Variables
 $primary-color: rgb(239, 233, 225);
 $secondary-color: rgb(164, 149, 183);
 $third-color: rgb(150, 120, 100);
+$white: #ffffff;
+$breakpoint-mobile: 768px;
+$breakpoint-small: 400px;
 
+// Mixins
+@mixin heading-style {
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-weight: bold;
+  color: $secondary-color;
+}
+
+@mixin body-text {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: $third-color;
+  font-size: 1em;
+  line-height: 1.5;
+}
+
+// Reset and Base Styles
 * {
-    box-sizing: border-box;
-}
-
-.header {
-    text-align: center;
-    padding: 30px;
-    background-color: white;
-}
-
-.topline {
-    background-color: $primary-color;
-    height: 20px;
-    margin: 0px;
-    border: 0px;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-    background-color: white;
-    margin: 0px;
+  background-color: $white;
+  margin: 0;
+  min-height: 100vh;
+}
+
+// Layout Components
+.header {
+  text-align: center;
+  padding: 2rem;
+  background-color: $white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.topline {
+  background-color: $primary-color;
+  height: 20px;
+  margin: 0;
+  border: 0;
+  transition: height 0.3s ease;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
 }
 
 .main {
-    padding: 10px;
-    float: left;
-    width: 50%;
+  padding: 1.5rem;
+  width: 50%;
+  
+  @media (max-width: $breakpoint-mobile) {
+    width: 100%;
+  }
 }
 
+// Typography
 h1 {
-    color: $secondary-color;
-    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-    font: bold;
-    font-size: 2em;
+  @include heading-style;
+  font-size: 2em;
+  margin-bottom: 0.5rem;
 }
 
 h3 {
-    color: $secondary-color;
-    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-    font: bold;
-    font-size: 1.3em;
+  @include heading-style;
+  font-size: 1.3em;
+  margin-bottom: 1rem;
 }
 
 p {
-    color: $third-color;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 1em;
+  @include body-text;
+  margin-bottom: 1rem;
 }
 
-ul {
-    color: $third-color;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 1em;
+// Form Elements
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+label {
+  @include body-text;
+  display: block;
+  margin-bottom: 0.5rem;
 }
 
 input[type=text],
 textarea {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid $secondary-color;
-    border-radius: 4px;
-    resize: vertical;
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid $primary-color;
+  border-radius: 4px;
+  resize: vertical;
+  font-family: inherit;
+  transition: border-color 0.3s ease;
+  
+  &:focus {
+    outline: none;
+    border-color: $secondary-color;
+  }
 }
 
-label {
-    color: $third-color;
-    padding: 12px 12px 12px 0;
-    display: inline-block;
+button[type=submit] {
+  background-color: $secondary-color;
+  color: $white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  
+  &:hover {
+    background-color: darken($secondary-color, 10%);
+  }
 }
+
+// History Section
 .history {
-    float: left;
-    width: 25%;
+  float: left;
+  width: 25%;
+  padding: 1.5rem;
+  
+  @media (max-width: $breakpoint-mobile) {
+    width: 100%;
+  }
 }
+
 .history-list {
-    list-style-type: none;
-    padding: 0;
+  list-style-type: none;
+  padding: 0;
+  
+  li {
+    margin: 1rem 0;
+    padding: 1rem;
+    background-color: $primary-color;
+    border-radius: 4px;
+    transition: transform 0.2s ease;
+    
+    &:hover {
+      transform: translateY(-2px);
+    }
+  }
 }
 
-.history-list li {
-    margin: 10px 0;
-    padding: 5px;
+// Responsive Design
+@media only screen and (max-width: $breakpoint-small) {
+  h1 {
+    font-size: 2rem;
+  }
+  
+  .topline {
+    display: none;
+  }
+  
+  .main,
+  .history {
+    padding: 1rem;
+  }
 }
 
-@media only screen and (max-width: 400px) {
-    h1 {
-        font-size: 50px;
-    }
+// Animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-    .topline {
-        display: none;
-    }
+.fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+// Accessibility
+:focus {
+  outline: 3px solid rgba($secondary-color, 0.5);
+  outline-offset: 2px;
+}
+
+// Print styles
+@media print {
+  .topline,
+  button {
+    display: none;
+  }
+  
+  body {
+    background: $white;
+  }
+  
+  * {
+    color: black !important;
+  }
 }

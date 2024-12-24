@@ -1,30 +1,63 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="script.js"></script>
+    <title>Message Board</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="script.js"></script>
 </head>
-
 <body>
     <div class="header">
-        <h1>Hello!</h1>
+        <h1>Message Board</h1>
+        <p class="subtitle">Share your thoughts with others</p>
     </div>
-    <div class="topline"></div>
-    <div class="main">
-        <h3 id="contentH"></h3>
-        <p id="contentP">Loading content...</p>
-        <form id="updateForm" onsubmit="handleSubmit(event)">
-            <label for="content">Title:</label><br>
-            <input type="text" id="content" name="content"><br>
-            <label for="userMessage">Message:</label><br>
-            <textarea name="message" id="userMessage" rows="4" cols="50"
-                placeholder="Enter your message here..."></textarea><br>
-            <button type="submit">Submit</button>
-        </form>
-    </div>
-    <div id="history"></div>
-</body>
+    
+    <div class="container">
+        <div class="current-content">
+            <div class="content-card">
+                <h2 id="contentH">Loading...</h2>
+                <p id="contentP" class="message-text">Loading content...</p>
+            </div>
+        </div>
 
+        <div class="form-section">
+            <h3>Create New Post</h3>
+            <form id="updateForm" onsubmit="handleSubmit(event)" class="input-form">
+                <div class="form-group">
+                    <label for="content">Title</label>
+                    <input type="text" 
+                           id="content" 
+                           name="content" 
+                           placeholder="Enter a title"
+                           required
+                           maxlength="100">
+                </div>
+
+                <div class="form-group">
+                    <label for="userMessage">Message</label>
+                    <textarea 
+                        name="message" 
+                        id="userMessage" 
+                        rows="4" 
+                        placeholder="What's on your mind?"
+                        required
+                        maxlength="500"></textarea>
+                    <span class="char-counter" id="messageCounter">0/500</span>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    Post Message
+                </button>
+            </form>
+        </div>
+
+        <div class="history-section">
+            <h3>Previous Messages</h3>
+            <div id="history" class="history-container">
+                <!-- History content will be inserted here -->
+            </div>
+        </div>
+    </div>
+</body>
 </html>

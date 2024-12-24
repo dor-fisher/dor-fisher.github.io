@@ -5,45 +5,106 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Message Board</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script defer src="script.js"></script>
 </head>
 <body>
     <div class="header">
         <h1>Message Board</h1>
+        <!-- Auth Container -->
+        <div id="authContainer" class="auth-container">
+            <!-- Show when logged out -->
+            <div id="loggedOutView" class="auth-buttons">
+                <button onclick="showAuthModal('login')" class="auth-btn">Login</button>
+                <button onclick="showAuthModal('register')" class="auth-btn">Register</button>
+            </div>
+            <!-- Show when logged in -->
+            <div id="loggedInView" class="auth-user hidden">
+                <span id="userGreeting"></span>
+                <button onclick="handleLogout()" class="auth-btn">Logout</button>
+            </div>
+        </div>
     </div>
-    <div class="topline"></div>
     
+    <!-- Auth Modal -->
+    <div id="authModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeAuthModal()">&times;</span>
+            
+            <!-- Login Form -->
+            <form id="loginForm" class="auth-form hidden">
+                <h2>Login</h2>
+                <div class="form-group">
+                    <label for="loginUsername">Username:</label>
+                    <input type="text" id="loginUsername" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password:</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit">Login</button>
+                <p>Don't have an account? <a href="#" onclick="switchAuthForm('register')">Register</a></p>
+            </form>
+
+            <!-- Register Form -->
+            <form id="registerForm" class="auth-form hidden">
+                <h2>Register</h2>
+                <div class="form-group">
+                    <label for="registerUsername">Username:</label>
+                    <input type="text" id="registerUsername" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Password:</label>
+                    <input type="password" id="registerPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password:</label>
+                    <input type="password" id="confirmPassword" required>
+                </div>
+                <button type="submit">Register</button>
+                <p>Already have an account? <a href="#" onclick="switchAuthForm('login')">Login</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Message Board Container -->
     <div class="container">
         <!-- Form Column -->
         <div class="form-section">
-            <h3>Create New Post</h3>
-            <form id="updateForm" onsubmit="handleSubmit(event)">
-                <label for="content">Title:</label>
-                <input type="text" id="content" name="content" required>
-                
-                <label for="userMessage">Message:</label>
-                <textarea name="message" id="userMessage" rows="4" 
+            <h3>Create New Message</h3>
+            <form id="messageForm" class="hidden">
+                <label for="messageContent">Message:</label>
+                <textarea name="content" id="messageContent" rows="4" 
                     placeholder="Enter your message here..." required></textarea>
-                
                 <button type="submit">Post Message</button>
             </form>
-        </div>
-
-        <!-- Main Post Column -->
-        <div class="main">
-            <div class="post-card">
-                <h3 id="contentH"></h3>
-                <p id="contentP">Loading content...</p>
+            <div id="loginPrompt" class="login-prompt">
+                Please login to post messages
             </div>
         </div>
 
-        <!-- History Column -->
-        <div class="history">
-            <h3>Previous Messages</h3>
-            <div id="history" class="history-list">
-                <!-- History items will be inserted here -->
+        <!-- Messages Column -->
+        <div class="messages">
+            <h3>Messages</h3>
+            <div id="messagesList" class="messages-list">
+                <!-- Messages will be inserted here -->
             </div>
         </div>
     </div>
+
+    <!-- Message Edit Modal -->
+    <div id="editModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeEditModal()">&times;</span>
+            <h2>Edit Message</h2>
+            <form id="editForm">
+                <textarea id="editContent" required></textarea>
+                <button type="submit">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast" class="toast hidden"></div>
 </body>
 </html>

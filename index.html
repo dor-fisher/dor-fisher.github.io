@@ -17,8 +17,8 @@
         <div id="authContainer" class="auth-container">
             <!-- Show when logged out -->
             <div id="loggedOutView" class="auth-buttons">
-                <button onclick="showAuthModal('login')" class="auth-btn">Login</button>
-                <button onclick="showAuthModal('register')" class="auth-btn">Register</button>
+                <button onclick="showAuthModal('login')" class="auth-btn" data-action="login">Login</button>
+                <button onclick="showAuthModal('register')" class="auth-btn" data-action="register">Register</button>
             </div>
             <!-- Show when logged in -->
             <div id="loggedInView" class="auth-user hidden">

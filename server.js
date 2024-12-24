@@ -10,34 +10,41 @@ const bcrypt = require('bcryptjs');
 const { v4: uuidv4 } = require('uuid');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
-// File paths
-const USERS_FILE_PATH = path.join(__dirname, 'users.json');
-const MESSAGES_FILE_PATH = path.join(__dirname, 'messages.json');
+// Trust proxy - add this before other middleware
+app.set('trust proxy', 1);
 
 // Middleware
 app.use(helmet());
 app.use(cors({
-    origin: true,
+    origin: ['https://dor-fisher.github.io', 'http://localhost:3000'],
     credentials: true
 }));
 app.use(express.json({ limit: '1mb' }));
 app.use(morgan('combined'));
+
+// Session configuration
 app.use(session({
     secret: process.env.SESSION_SECRET || 'your-secret-key',
     resave: false,
     saveUninitialized: false,
+    proxy: true, // Add this for proxy support
     cookie: {
         secure: process.env.NODE_ENV === 'production',
         httpOnly: true,
+        sameSite: 'none', // Required for cross-site cookies
         maxAge: 24 * 60 * 60 * 1000 // 24 hours
     }
 }));
 
+// Rate limiter configuration
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
-    max: 100
+    max: 100,
+    standardHeaders: true,
+    legacyHeaders: false,
+    trustProxy: true // Add this for rate limiter
 });
 app.use('/api/', limiter);
 

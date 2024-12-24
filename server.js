@@ -1,11 +1,11 @@
-Copyconst express = require('express');
+const express = require('express');
 const cors = require('cors');
 const fs = require('fs').promises;
 const path = require('path');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
-const PORT = process.env.PORT || 3000;  // Add this line here
+const PORT = process.env.PORT || 3000;
 
 const app = express();
 const DATA_FILE_PATH = path.join(__dirname, 'data.json');

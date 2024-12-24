@@ -1,7 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const fs = require('fs').promises;
-const path = require('path');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
@@ -12,7 +10,11 @@ const { v4: uuidv4 } = require('uuid');
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-// Trust proxy - add this before other middleware
+// In-memory storage (temporary solution)
+let users = [];
+let messages = [];
+
+// Trust proxy
 app.set('trust proxy', 1);
 
 // Middleware
@@ -29,53 +31,24 @@ app.use(session({
     secret: process.env.SESSION_SECRET || 'your-secret-key',
     resave: false,
     saveUninitialized: false,
-    proxy: true, // Add this for proxy support
+    proxy: true,
     cookie: {
-        secure: process.env.NODE_ENV === 'production',
+        secure: true,
         httpOnly: true,
-        sameSite: 'none', // Required for cross-site cookies
-        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+        sameSite: 'none',
+        maxAge: 24 * 60 * 60 * 1000
     }
 }));
 
-// Rate limiter configuration
+// Rate limiter
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 100,
     standardHeaders: true,
     legacyHeaders: false,
-    trustProxy: true // Add this for rate limiter
+    trustProxy: true
 });
 app.use('/api/', limiter);
-
-// Cache mechanism
-let usersCache = null;
-let messagesCache = null;
-let lastUsersRead = 0;
-let lastMessagesRead = 0;
-const CACHE_DURATION = 5000;
-
-// File reading utilities
-async function readJsonFile(filePath, cache, lastRead) {
-    const now = Date.now();
-    if (cache && (now - lastRead) < CACHE_DURATION) {
-        return cache;
-    }
-
-    try {
-        const fileContent = await fs.readFile(filePath, 'utf8');
-        return JSON.parse(fileContent);
-    } catch (error) {
-        if (error.code === 'ENOENT') {
-            return [];
-        }
-        throw error;
-    }
-}
-
-async function writeJsonFile(filePath, data) {
-    await fs.writeFile(filePath, JSON.stringify(data, null, 2));
-}
 
 // Authentication middleware
 const requireAuth = (req, res, next) => {
@@ -94,8 +67,6 @@ app.post('/api/register', async (req, res) => {
             return res.status(400).json({ error: 'Username and password are required' });
         }
 
-        const users = await readJsonFile(USERS_FILE_PATH, usersCache, lastUsersRead);
-        
         if (users.find(u => u.username === username)) {
             return res.status(400).json({ error: 'Username already exists' });
         }
@@ -109,11 +80,9 @@ app.post('/api/register', async (req, res) => {
         };
 
         users.push(newUser);
-        await writeJsonFile(USERS_FILE_PATH, users);
-        usersCache = users;
-        lastUsersRead = Date.now();
-
         req.session.userId = newUser.id;
+        
+        console.log('User registered:', { id: newUser.id, username: newUser.username });
         
         res.json({ 
             id: newUser.id, 
@@ -130,14 +99,14 @@ app.post('/api/login', async (req, res) => {
     try {
         const { username, password } = req.body;
 
-        const users = await readJsonFile(USERS_FILE_PATH, usersCache, lastUsersRead);
         const user = users.find(u => u.username === username);
-
         if (!user || !(await bcrypt.compare(password, user.password))) {
             return res.status(401).json({ error: 'Invalid credentials' });
         }
 
         req.session.userId = user.id;
+        
+        console.log('User logged in:', { id: user.id, username: user.username });
         
         res.json({ 
             id: user.id, 
@@ -156,9 +125,8 @@ app.post('/api/logout', (req, res) => {
 });
 
 // Message routes
-app.get('/api/messages', async (req, res) => {
+app.get('/api/messages', (req, res) => {
     try {
-        const messages = await readJsonFile(MESSAGES_FILE_PATH, messagesCache, lastMessagesRead);
         res.json(messages);
     } catch (error) {
         console.error('Error in GET /api/messages:', error);
@@ -166,7 +134,7 @@ app.get('/api/messages', async (req, res) => {
     }
 });
 
-app.post('/api/messages', requireAuth, async (req, res) => {
+app.post('/api/messages', requireAuth, (req, res) => {
     try {
         const { content } = req.body;
 
@@ -174,11 +142,11 @@ app.post('/api/messages', requireAuth, async (req, res) => {
             return res.status(400).json({ error: 'Content is required' });
         }
 
-        const users = await readJsonFile(USERS_FILE_PATH, usersCache, lastUsersRead);
         const user = users.find(u => u.id === req.session.userId);
+        if (!user) {
+            return res.status(401).json({ error: 'User not found' });
+        }
 
-        const messages = await readJsonFile(MESSAGES_FILE_PATH, messagesCache, lastMessagesRead);
-        
         const newMessage = {
             id: uuidv4(),
             content,
@@ -194,10 +162,6 @@ app.post('/api/messages', requireAuth, async (req, res) => {
             messages.pop();
         }
 
-        await writeJsonFile(MESSAGES_FILE_PATH, messages);
-        messagesCache = messages;
-        lastMessagesRead = Date.now();
-
         res.json(newMessage);
     } catch (error) {
         console.error('Error in POST /api/messages:', error);
@@ -205,7 +169,7 @@ app.post('/api/messages', requireAuth, async (req, res) => {
     }
 });
 
-app.put('/api/messages/:id', requireAuth, async (req, res) => {
+app.put('/api/messages/:id', requireAuth, (req, res) => {
     try {
         const { id } = req.params;
         const { content } = req.body;
@@ -214,9 +178,7 @@ app.put('/api/messages/:id', requireAuth, async (req, res) => {
             return res.status(400).json({ error: 'Content is required' });
         }
 
-        const messages = await readJsonFile(MESSAGES_FILE_PATH, messagesCache, lastMessagesRead);
         const messageIndex = messages.findIndex(m => m.id === id);
-
         if (messageIndex === -1) {
             return res.status(404).json({ error: 'Message not found' });
         }
@@ -231,10 +193,6 @@ app.put('/api/messages/:id', requireAuth, async (req, res) => {
             updatedAt: new Date().toISOString()
         };
 
-        await writeJsonFile(MESSAGES_FILE_PATH, messages);
-        messagesCache = messages;
-        lastMessagesRead = Date.now();
-
         res.json(messages[messageIndex]);
     } catch (error) {
         console.error('Error in PUT /api/messages/:id:', error);
@@ -242,18 +200,12 @@ app.put('/api/messages/:id', requireAuth, async (req, res) => {
     }
 });
 
-// Initialize files
-async function initializeFiles() {
-    try {
-        await readJsonFile(USERS_FILE_PATH, null, 0);
-        await readJsonFile(MESSAGES_FILE_PATH, null, 0);
-    } catch (error) {
-        console.error('Error initializing files:', error);
-    }
-}
+// Health check endpoint
+app.get('/health', (req, res) => {
+    res.json({ status: 'ok' });
+});
 
-initializeFiles();
-
+// Start server
 const server = app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });

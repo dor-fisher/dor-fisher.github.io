@@ -135,5 +135,47 @@ function initializeEventListeners() {
     }
 }
 
+// Add this to your existing script.js
+document.addEventListener('DOMContentLoaded', function() {
+    // Character counter for textarea
+    const messageArea = document.getElementById('userMessage');
+    const counter = document.getElementById('messageCounter');
+    
+    messageArea.addEventListener('input', function() {
+        const remaining = this.value.length;
+        counter.textContent = `${remaining}/500`;
+        
+        if (remaining >= 450) {
+            counter.style.color = '#ef4444';
+        } else {
+            counter.style.color = '#64748b';
+        }
+    });
+
+    // Form validation feedback
+    const form = document.getElementById('updateForm');
+    const titleInput = document.getElementById('content');
+
+    form.addEventListener('submit', function(event) {
+        if (!titleInput.value.trim() || !messageArea.value.trim()) {
+            event.preventDefault();
+            alert('Please fill in all fields');
+        }
+    });
+
+    // Loading states
+    const submitButton = form.querySelector('button[type="submit"]');
+    form.addEventListener('submit', function() {
+        submitButton.disabled = true;
+        submitButton.textContent = 'Posting...';
+        
+        // Reset button after 2 seconds if no response
+        setTimeout(() => {
+            submitButton.disabled = false;
+            submitButton.textContent = 'Post Message';
+        }, 2000);
+    });
+});
+
 // Initialize
 initializeEventListeners();

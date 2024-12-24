@@ -28,58 +28,79 @@ const elements = {
     toast: document.getElementById('toast')
 };
 
+// Message Functions
+async function loadMessages() {
+    try {
+        const response = await fetch(`${API_URL}/api/messages`, {
+            ...API_CONFIG,
+            method: 'GET'
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to load messages');
+        }
+
+        const messages = await response.json();
+        displayMessages(messages);
+    } catch (error) {
+        console.error('Error loading messages:', error);
+        showToast(error.message, 'error');
+    }
+}
+
+function displayMessages(messages) {
+    if (!elements.messagesList) return;
+
+    elements.messagesList.innerHTML = messages.map(message => `
+        <div class="message" data-id="${message.id}">
+            <div class="message-header">
+                <span class="username">${message.username}</span>
+                <span class="timestamp">${new Date(message.createdAt).toLocaleString()}</span>
+            </div>
+            <div class="message-content">${message.content}</div>
+            ${currentUser && currentUser.id === message.userId ? `
+                <div class="message-actions">
+                    <button onclick="openEditModal('${message.id}', '${message.content.replace(/'/g, "\\'")}')">
+                        <i class="fas fa-edit"></i> Edit
+                    </button>
+                </div>
+            ` : ''}
+        </div>
+    `).join('');
+}
+
 // Auth Functions
 async function handleLogin(event) {
     event.preventDefault();
-    console.log('Login form submitted');
-
     const username = document.getElementById('loginUsername').value.trim();
     const password = document.getElementById('loginPassword').value;
 
-    if (!username || !password) {
-        showToast('Please fill in all fields', 'error');
-        return;
-    }
-
     try {
         const response = await fetch(`${API_URL}/api/login`, {
+            ...API_CONFIG,
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            credentials: 'include',
             body: JSON.stringify({ username, password })
         });
 
         const data = await response.json();
-
-        if (!response.ok) {
-            throw new Error(data.error || 'Login failed');
-        }
+        if (!response.ok) throw new Error(data.error || 'Login failed');
 
         currentUser = data;
         updateAuthUI();
         closeAuthModal();
         showToast('Logged in successfully!', 'success');
-        loadMessages();
+        await loadMessages();
     } catch (error) {
         console.error('Login error:', error);
-        showToast(error.message || 'Login failed', 'error');
+        showToast(error.message, 'error');
     }
 }
 
 async function handleRegister(event) {
     event.preventDefault();
-    console.log('Register form submitted');
-
     const username = document.getElementById('registerUsername').value.trim();
     const password = document.getElementById('registerPassword').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
-
-    if (!username || !password || !confirmPassword) {
-        showToast('Please fill in all fields', 'error');
-        return;
-    }
 
     if (password !== confirmPassword) {
         showToast('Passwords do not match', 'error');
@@ -88,98 +109,100 @@ async function handleRegister(event) {
 
     try {
         const response = await fetch(`${API_URL}/api/register`, {
+            ...API_CONFIG,
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            credentials: 'include',
             body: JSON.stringify({ username, password })
         });
 
         const data = await response.json();
-
-        if (!response.ok) {
-            throw new Error(data.error || 'Registration failed');
-        }
+        if (!response.ok) throw new Error(data.error || 'Registration failed');
 
         currentUser = data;
         updateAuthUI();
         closeAuthModal();
         showToast('Registered successfully!', 'success');
-        loadMessages();
+        await loadMessages();
     } catch (error) {
         console.error('Registration error:', error);
-        showToast(error.message || 'Registration failed', 'error');
+        showToast(error.message, 'error');
+    }
+}
+
+async function handleLogout() {
+    try {
+        const response = await fetch(`${API_URL}/api/logout`, {
+            ...API_CONFIG,
+            method: 'POST'
+        });
+
+        if (!response.ok) throw new Error('Logout failed');
+
+        currentUser = null;
+        updateAuthUI();
+        showToast('Logged out successfully!', 'success');
+        await loadMessages();
+    } catch (error) {
+        console.error('Logout error:', error);
+        showToast(error.message, 'error');
+    }
+}
+
+async function handleMessageSubmit(event) {
+    event.preventDefault();
+    const content = elements.messageForm.content.value.trim();
+
+    if (!content) {
+        showToast('Message cannot be empty', 'error');
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_URL}/api/messages`, {
+            ...API_CONFIG,
+            method: 'POST',
+            body: JSON.stringify({ content })
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Failed to post message');
+
+        elements.messageForm.reset();
+        await loadMessages();
+        showToast('Message posted successfully!', 'success');
+    } catch (error) {
+        console.error('Post message error:', error);
+        showToast(error.message, 'error');
     }
 }
 
 // UI Functions
-function showToast(message, type = 'info') {
-    const toast = elements.toast;
-    toast.textContent = message;
-    toast.className = `toast toast-${type}`;
-    toast.classList.remove('hidden');
-
-    setTimeout(() => {
-        toast.classList.add('hidden');
-    }, 3000);
-}
-
 function updateAuthUI() {
     if (currentUser) {
         elements.loggedOutView.classList.add('hidden');
         elements.loggedInView.classList.remove('hidden');
         elements.userGreeting.textContent = `Welcome, ${currentUser.username}!`;
-        elements.messageForm.classList.remove('hidden');
-        elements.loginPrompt.classList.add('hidden');
+        elements.messageForm?.classList.remove('hidden');
+        elements.loginPrompt?.classList.add('hidden');
     } else {
         elements.loggedOutView.classList.remove('hidden');
         elements.loggedInView.classList.add('hidden');
-        elements.messageForm.classList.add('hidden');
-        elements.loginPrompt.classList.remove('hidden');
+        elements.messageForm?.classList.add('hidden');
+        elements.loginPrompt?.classList.remove('hidden');
     }
 }
 
-// Event Listeners
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM Content Loaded');
-    
-    // Add form submit event listeners
-    elements.loginForm?.addEventListener('submit', handleLogin);
-    elements.registerForm?.addEventListener('submit', handleRegister);
-    elements.messageForm?.addEventListener('submit', handleMessageSubmit);
-    elements.editForm?.addEventListener('submit', handleMessageEdit);
-
-    // Add click handlers for auth buttons
-    document.querySelectorAll('.auth-btn').forEach(button => {
-        button.addEventListener('click', (e) => {
-            e.preventDefault();
-            const action = button.getAttribute('data-action');
-            if (action === 'login' || action === 'register') {
-                showAuthModal(action);
-            }
-        });
-    });
-
-    loadMessages();
-});
-
-// Add these UI functions if they're not already present
 function showAuthModal(type) {
-    console.log('Showing auth modal:', type);
     elements.authModal.classList.remove('hidden');
     switchAuthForm(type);
 }
 
 function closeAuthModal() {
-    console.log('Closing auth modal');
     elements.authModal.classList.add('hidden');
     elements.loginForm.reset();
     elements.registerForm.reset();
 }
 
 function switchAuthForm(type) {
-    console.log('Switching to form type:', type);
     if (type === 'login') {
         elements.loginForm.classList.remove('hidden');
         elements.registerForm.classList.add('hidden');
@@ -189,4 +212,23 @@ function switchAuthForm(type) {
     }
 }
 
-// Keep your existing showToast function and other UI functions...
+function showToast(message, type = 'info') {
+    elements.toast.textContent = message;
+    elements.toast.className = `toast toast-${type}`;
+    elements.toast.classList.remove('hidden');
+
+    setTimeout(() => {
+        elements.toast.classList.add('hidden');
+    }, 3000);
+}
+
+// Event Listeners
+document.addEventListener('DOMContentLoaded', () => {
+    // Auth form listeners
+    elements.loginForm?.addEventListener('submit', handleLogin);
+    elements.registerForm?.addEventListener('submit', handleRegister);
+    elements.messageForm?.addEventListener('submit', handleMessageSubmit);
+
+    // Load initial messages
+    loadMessages().catch(console.error);
+});

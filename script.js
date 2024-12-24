@@ -60,7 +60,7 @@ function displayMessages(messages) {
             <div class="message-content">${message.content}</div>
             ${currentUser && currentUser.id === message.userId ? `
                 <div class="message-actions">
-                    <button onclick="openEditModal('${message.id}', '${message.content.replace(/'/g, "\\'")}')">
+                    <button onclick="openEditModal('${message.id}', \`${message.content.replace(/`/g, '\\`')}\`)">
                         <i class="fas fa-edit"></i> Edit
                     </button>
                 </div>
@@ -68,6 +68,48 @@ function displayMessages(messages) {
         </div>
     `).join('');
 }
+
+// Edit Functions
+async function handleMessageEdit(event) {
+    event.preventDefault();
+    const content = elements.editContent.value.trim();
+
+    if (!content) {
+        showToast('Message cannot be empty', 'error');
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_URL}/api/messages/${currentEditingMessageId}`, {
+            ...API_CONFIG,
+            method: 'PUT',
+            body: JSON.stringify({ content })
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Failed to update message');
+
+        closeEditModal();
+        await loadMessages();
+        showToast('Message updated successfully!', 'success');
+    } catch (error) {
+        console.error('Edit message error:', error);
+        showToast(error.message, 'error');
+    }
+}
+
+// Make these functions global for onclick access
+window.openEditModal = function(messageId, content) {
+    currentEditingMessageId = messageId;
+    elements.editContent.value = content;
+    elements.editModal.classList.remove('hidden');
+};
+
+window.closeEditModal = function() {
+    elements.editModal.classList.add('hidden');
+    currentEditingMessageId = null;
+    elements.editForm.reset();
+};
 
 // Auth Functions
 async function handleLogin(event) {
@@ -228,7 +270,24 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.loginForm?.addEventListener('submit', handleLogin);
     elements.registerForm?.addEventListener('submit', handleRegister);
     elements.messageForm?.addEventListener('submit', handleMessageSubmit);
+    elements.editForm?.addEventListener('submit', handleMessageEdit);
+
+    // Close modals when clicking outside
+    window.addEventListener('click', (event) => {
+        if (event.target === elements.authModal) {
+            closeAuthModal();
+        }
+        if (event.target === elements.editModal) {
+            closeEditModal();
+        }
+    });
 
     // Load initial messages
     loadMessages().catch(console.error);
 });
+
+// Make necessary functions available globally
+window.handleLogout = handleLogout;
+window.showAuthModal = showAuthModal;
+window.closeAuthModal = closeAuthModal;
+window.switchAuthForm = switchAuthForm;

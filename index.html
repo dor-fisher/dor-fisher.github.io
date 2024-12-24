@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script defer src="script.js"></script>
 </head>
+
 <body>
     <div class="header">
         <h1>Message Board</h1>
@@ -25,12 +27,12 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Auth Modal -->
     <div id="authModal" class="modal hidden">
         <div class="modal-content">
             <span class="close-btn" onclick="closeAuthModal()">&times;</span>
-            
+
             <!-- Login Form -->
             <form id="loginForm" class="auth-form hidden">
                 <h2>Login</h2>
@@ -74,8 +76,8 @@
             <h3>Create New Message</h3>
             <form id="messageForm" class="hidden">
                 <label for="messageContent">Message:</label>
-                <textarea name="content" id="messageContent" rows="4" 
-                    placeholder="Enter your message here..." required></textarea>
+                <textarea name="content" id="messageContent" rows="4" placeholder="Enter your message here..."
+                    required></textarea>
                 <button type="submit">Post Message</button>
             </form>
             <div id="loginPrompt" class="login-prompt">
@@ -107,4 +109,5 @@
     <!-- Toast Notifications -->
     <div id="toast" class="toast hidden"></div>
 </body>
+
 </html>

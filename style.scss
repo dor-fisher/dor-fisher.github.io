@@ -8,201 +8,261 @@ $breakpoint-small: 400px;
 
 // Mixins
 @mixin heading-style {
-  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-  font-weight: bold;
-  color: $secondary-color;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-weight: bold;
+    color: $secondary-color;
 }
 
 @mixin body-text {
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  color: $third-color;
-  font-size: 1em;
-  line-height: 1.5;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: $third-color;
+    font-size: 1em;
+    line-height: 1.5;
+}
+
+@mixin card {
+    background-color: $white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+    }
 }
 
 // Reset and Base Styles
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-  background-color: $white;
-  margin: 0;
-  min-height: 100vh;
+    background-color: $primary-color;
+    margin: 0;
+    min-height: 100vh;
 }
 
 // Layout Components
 .header {
-  text-align: center;
-  padding: 2rem;
-  background-color: $white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    padding: 2rem;
+    background-color: $white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .topline {
-  background-color: $primary-color;
-  height: 20px;
-  margin: 0;
-  border: 0;
-  transition: height 0.3s ease;
+    background-color: $primary-color;
+    height: 20px;
+    margin: 0;
+    border: 0;
+    transition: height 0.3s ease;
 }
 
 .container {
-  display: flex;
-  flex-wrap: wrap;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1rem;
+    gap: 2rem;
 }
 
+// Create Post Section
+.create-post {
+    width: 25%;
+    
+    @media (max-width: $breakpoint-mobile) {
+        width: 100%;
+    }
+
+    .card {
+        @include card;
+        position: sticky;
+        top: 1rem;
+    }
+}
+
+// Main Posts Section
 .main {
-  padding: 1.5rem;
-  width: 50%;
-  
-  @media (max-width: $breakpoint-mobile) {
-    width: 100%;
-  }
-}
+    width: 45%;
+    
+    @media (max-width: $breakpoint-mobile) {
+        width: 100%;
+    }
 
-// Typography
-h1 {
-  @include heading-style;
-  font-size: 2em;
-  margin-bottom: 0.5rem;
-}
-
-h3 {
-  @include heading-style;
-  font-size: 1.3em;
-  margin-bottom: 1rem;
-}
-
-p {
-  @include body-text;
-  margin-bottom: 1rem;
-}
-
-// Form Elements
-.form-group {
-  margin-bottom: 1.5rem;
-}
-
-label {
-  @include body-text;
-  display: block;
-  margin-bottom: 0.5rem;
-}
-
-input[type=text],
-textarea {
-  width: 100%;
-  padding: 0.75rem;
-  border: 2px solid $primary-color;
-  border-radius: 4px;
-  resize: vertical;
-  font-family: inherit;
-  transition: border-color 0.3s ease;
-  
-  &:focus {
-    outline: none;
-    border-color: $secondary-color;
-  }
-}
-
-button[type=submit] {
-  background-color: $secondary-color;
-  color: $white;
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  
-  &:hover {
-    background-color: darken($secondary-color, 10%);
-  }
+    .card {
+        @include card;
+    }
 }
 
 // History Section
 .history {
-  float: left;
-  width: 25%;
-  padding: 1.5rem;
-  
-  @media (max-width: $breakpoint-mobile) {
-    width: 100%;
-  }
-}
-
-.history-list {
-  list-style-type: none;
-  padding: 0;
-  
-  li {
-    margin: 1rem 0;
-    padding: 1rem;
-    background-color: $primary-color;
-    border-radius: 4px;
-    transition: transform 0.2s ease;
+    width: 25%;
     
-    &:hover {
-      transform: translateY(-2px);
+    @media (max-width: $breakpoint-mobile) {
+        width: 100%;
     }
-  }
 }
 
-// Responsive Design
-@media only screen and (max-width: $breakpoint-small) {
-  h1 {
-    font-size: 2rem;
-  }
-  
-  .topline {
-    display: none;
-  }
-  
-  .main,
-  .history {
+.message-card {
+    @include card;
+    position: relative;
+    background-color: $white;
     padding: 1rem;
-  }
+    margin-bottom: 1rem;
+
+    &::before {
+        content: '';
+        position: absolute;
+        left: -10px;
+        top: 15px;
+        border-top: 10px solid transparent;
+        border-bottom: 10px solid transparent;
+        border-right: 10px solid $white;
+    }
+
+    h4 {
+        @include heading-style;
+        font-size: 1.1em;
+        margin-bottom: 0.5rem;
+    }
+
+    p {
+        @include body-text;
+        font-size: 0.9em;
+        margin-bottom: 0.5rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+// Typography
+h1 {
+    @include heading-style;
+    font-size: 2em;
+    margin-bottom: 0.5rem;
+}
+
+h3 {
+    @include heading-style;
+    font-size: 1.3em;
+    margin-bottom: 1rem;
+}
+
+p {
+    @include body-text;
+    margin-bottom: 1rem;
+}
+
+// Form Elements
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+label {
+    @include body-text;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+input[type=text],
+textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid $primary-color;
+    border-radius: 4px;
+    resize: vertical;
+    font-family: inherit;
+    transition: border-color 0.3s ease;
+
+    &:focus {
+        outline: none;
+        border-color: $secondary-color;
+    }
+}
+
+button[type=submit] {
+    background-color: $secondary-color;
+    color: $white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+        background-color: darken($secondary-color, 10%);
+    }
+}
+
+// Timestamps
+.timestamp {
+    font-size: 0.8em;
+    color: lighten($third-color, 20%);
+    text-align: right;
+    margin-top: 0.5rem;
 }
 
 // Animations
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .fade-in {
-  animation: fadeIn 0.5s ease-out;
+    animation: fadeIn 0.5s ease-out;
 }
 
 // Accessibility
 :focus {
-  outline: 3px solid rgba($secondary-color, 0.5);
-  outline-offset: 2px;
+    outline: 3px solid rgba($secondary-color, 0.5);
+    outline-offset: 2px;
 }
 
 // Print styles
 @media print {
-  .topline,
-  button {
-    display: none;
-  }
-  
-  body {
-    background: $white;
-  }
-  
-  * {
-    color: black !important;
-  }
+    .topline,
+    button {
+        display: none;
+    }
+
+    body {
+        background: $white;
+    }
+
+    * {
+        color: black !important;
+    }
+}
+
+// Responsive Design
+@media only screen and (max-width: $breakpoint-small) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    .topline {
+        display: none;
+    }
+
+    .container {
+        padding: 0.5rem;
+        gap: 1rem;
+    }
+
+    .card {
+        padding: 1rem;
+    }
 }

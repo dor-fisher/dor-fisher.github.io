@@ -2,63 +2,71 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Message Board</title>
-    <link rel="stylesheet" href="style.css">
-    <script defer src="script.js"></script>
+    <title>Social Posts</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="header">
-        <h1>Message Board</h1>
-        <p class="subtitle">Share your thoughts with others</p>
-    </div>
+    <div class="topline"></div>
     
+    <header class="header">
+        <h1>Social Posts</h1>
+    </header>
+
     <div class="container">
-        <div class="current-content">
-            <div class="content-card">
-                <h3 id="contentH">Loading...</h3>
-                <p id="contentP" class="message-text">Loading content...</p>
+        <!-- Create Post Section -->
+        <section class="create-post">
+            <div class="card">
+                <h3>Create Post</h3>
+                <form class="fade-in">
+                    <div class="form-group">
+                        <label for="post-title">Title</label>
+                        <input type="text" id="post-title" name="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="post-content">Content</label>
+                        <textarea id="post-content" name="content" rows="6" required></textarea>
+                    </div>
+                    <button type="submit">Post</button>
+                </form>
             </div>
-        </div>
+        </section>
 
-        <div class="form-section">
-            <h3>Create New Post</h3>
-            <form id="updateForm" onsubmit="handleSubmit(event)" class="input-form">
-                <div class="form-group">
-                    <label for="content">Title</label>
-                    <input type="text" 
-                           id="content" 
-                           name="content" 
-                           placeholder="Enter a title"
-                           required
-                           maxlength="100">
-                </div>
-
-                <div class="form-group">
-                    <label for="userMessage">Message</label>
-                    <textarea 
-                        name="message" 
-                        id="userMessage" 
-                        rows="4" 
-                        placeholder="What's on your mind?"
-                        required
-                        maxlength="500"></textarea>
-                    <span class="char-counter" id="messageCounter">0/500</span>
-                </div>
-
-                <button type="submit" class="submit-btn">
-                    Post Message
-                </button>
-            </form>
-        </div>
-
-        <div class="history-section">
-            <h3>Previous Messages</h3>
-            <div id="history" class="history-container">
-                <!-- History content will be inserted here -->
+        <!-- Main Posts Section -->
+        <main class="main">
+            <div class="card fade-in">
+                <h3>First Post Title</h3>
+                <p>This is a sample post content. It can be much longer and will wrap naturally within the card.</p>
+                <div class="timestamp">Posted on Dec 24, 2024</div>
             </div>
-        </div>
+
+            <div class="card fade-in">
+                <h3>Second Post Title</h3>
+                <p>Another sample post with different content to show how multiple posts would look.</p>
+                <div class="timestamp">Posted on Dec 23, 2024</div>
+            </div>
+        </main>
+
+        <!-- History Section -->
+        <aside class="history">
+            <ul class="history-list">
+                <li class="message-card fade-in">
+                    <h4>Important Update</h4>
+                    <p>Team meeting tomorrow at...</p>
+                    <div class="timestamp">2 hours ago</div>
+                </li>
+                <li class="message-card fade-in">
+                    <h4>Project Milestone</h4>
+                    <p>Successfully completed phase one...</p>
+                    <div class="timestamp">5 hours ago</div>
+                </li>
+                <li class="message-card fade-in">
+                    <h4>New Feature Release</h4>
+                    <p>Introducing our latest updates...</p>
+                    <div class="timestamp">1 day ago</div>
+                </li>
+            </ul>
+        </aside>
     </div>
 </body>
 </html>

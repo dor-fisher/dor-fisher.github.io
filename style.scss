@@ -1,268 +1,143 @@
-// Variables
-$primary-color: rgb(239, 233, 225);
-$secondary-color: rgb(164, 149, 183);
-$third-color: rgb(150, 120, 100);
-$white: #ffffff;
-$breakpoint-mobile: 768px;
-$breakpoint-small: 400px;
-
-// Mixins
-@mixin heading-style {
-    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-    font-weight: bold;
-    color: $secondary-color;
+:root {
+    --primary-color: #2563eb;
+    --primary-hover: #1d4ed8;
+    --background-color: #f8fafc;
+    --card-background: #ffffff;
+    --text-color: #1e293b;
+    --border-color: #e2e8f0;
+    --success-color: #10b981;
 }
 
-@mixin body-text {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    color: $third-color;
-    font-size: 1em;
-    line-height: 1.5;
-}
-
-@mixin card {
-    background-color: $white;
-    border-radius: 8px;
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease;
-
-    &:hover {
-        transform: translateY(-2px);
-    }
-}
-
-// Reset and Base Styles
 * {
-    box-sizing: border-box;
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-    background-color: $primary-color;
-    margin: 0;
-    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--background-color);
 }
 
-// Layout Components
 .header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 2rem 1rem;
     text-align: center;
-    padding: 2rem;
-    background-color: $white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.topline {
-    background-color: $primary-color;
-    height: 20px;
-    margin: 0;
-    border: 0;
-    transition: height 0.3s ease;
-}
-
-.container {
-    display: flex;
-    flex-wrap: wrap;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 1rem;
-    gap: 2rem;
-}
-
-// Create Post Section
-.create-post {
-    width: 25%;
-    
-    @media (max-width: $breakpoint-mobile) {
-        width: 100%;
-    }
-
-    .card {
-        @include card;
-        position: sticky;
-        top: 1rem;
-    }
-}
-
-// Main Posts Section
-.main {
-    width: 45%;
-    
-    @media (max-width: $breakpoint-mobile) {
-        width: 100%;
-    }
-
-    .card {
-        @include card;
-    }
-}
-
-// History Section
-.history {
-    width: 25%;
-    
-    @media (max-width: $breakpoint-mobile) {
-        width: 100%;
-    }
-}
-
-.message-card {
-    @include card;
-    position: relative;
-    background-color: $white;
-    padding: 1rem;
-    margin-bottom: 1rem;
-
-    &::before {
-        content: '';
-        position: absolute;
-        left: -10px;
-        top: 15px;
-        border-top: 10px solid transparent;
-        border-bottom: 10px solid transparent;
-        border-right: 10px solid $white;
-    }
-
-    h4 {
-        @include heading-style;
-        font-size: 1.1em;
-        margin-bottom: 0.5rem;
-    }
-
-    p {
-        @include body-text;
-        font-size: 0.9em;
-        margin-bottom: 0.5rem;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-}
-
-// Typography
-h1 {
-    @include heading-style;
-    font-size: 2em;
-    margin-bottom: 0.5rem;
-}
-
-h3 {
-    @include heading-style;
-    font-size: 1.3em;
-    margin-bottom: 1rem;
-}
-
-p {
-    @include body-text;
-    margin-bottom: 1rem;
-}
-
-// Form Elements
-.form-group {
-    margin-bottom: 1.5rem;
-}
-
-label {
-    @include body-text;
-    display: block;
-    margin-bottom: 0.5rem;
-}
-
-input[type=text],
-textarea {
-    width: 100%;
-    padding: 0.75rem;
-    border: 2px solid $primary-color;
-    border-radius: 4px;
-    resize: vertical;
-    font-family: inherit;
-    transition: border-color 0.3s ease;
-
-    &:focus {
-        outline: none;
-        border-color: $secondary-color;
-    }
-}
-
-button[type=submit] {
-    background-color: $secondary-color;
-    color: $white;
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    width: 100%;
-    transition: background-color 0.3s ease;
-
-    &:hover {
-        background-color: darken($secondary-color, 10%);
-    }
-}
-
-// Timestamps
-.timestamp {
-    font-size: 0.8em;
-    color: lighten($third-color, 20%);
-    text-align: right;
+.subtitle {
+    opacity: 0.9;
+    font-size: 1.1rem;
     margin-top: 0.5rem;
 }
 
-// Animations
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
 }
 
-.fade-in {
-    animation: fadeIn 0.5s ease-out;
+.content-card {
+    background: var(--card-background);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
 }
 
-// Accessibility
-:focus {
-    outline: 3px solid rgba($secondary-color, 0.5);
-    outline-offset: 2px;
+.form-section {
+    background: var(--card-background);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-// Print styles
-@media print {
-    .topline,
-    button {
-        display: none;
-    }
-
-    body {
-        background: $white;
-    }
-
-    * {
-        color: black !important;
-    }
+.form-group {
+    margin-bottom: 1.5rem;
+    position: relative;
 }
 
-// Responsive Design
-@media only screen and (max-width: $breakpoint-small) {
-    h1 {
-        font-size: 2rem;
-    }
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
 
-    .topline {
-        display: none;
-    }
+input[type="text"],
+textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
 
+input[type="text"]:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.char-counter {
+    position: absolute;
+    right: 0;
+    bottom: -1.5rem;
+    font-size: 0.875rem;
+    color: #64748b;
+}
+
+.submit-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    width: 100%;
+}
+
+.submit-btn:hover {
+    background-color: var(--primary-hover);
+}
+
+.history-container {
+    background: var(--card-background);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.history-container ul {
+    list-style: none;
+}
+
+.history-container li {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.history-container li:last-child {
+    border-bottom: none;
+}
+
+@media (max-width: 600px) {
     .container {
-        padding: 0.5rem;
-        gap: 1rem;
+        margin: 1rem auto;
     }
-
-    .card {
+    
+    .content-card,
+    .form-section,
+    .history-container {
         padding: 1rem;
     }
 }

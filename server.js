@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 8080;
 
 // In-memory storage (temporary solution)
 let users = [];
-let messages = [];
+let posts = [];
 
 // Trust proxy
 app.set('trust proxy', 1);
@@ -61,10 +61,14 @@ const requireAuth = (req, res, next) => {
 // User routes
 app.post('/api/register', async (req, res) => {
     try {
-        const { username, password } = req.body;
+        const { username, password, role } = req.body;
 
-        if (!username || !password) {
-            return res.status(400).json({ error: 'Username and password are required' });
+        if (!username || !password || !role) {
+            return res.status(400).json({ error: 'Username, password, and role are required' });
+        }
+
+        if (!['reader', 'editor'].includes(role)) {
+            return res.status(400).json({ error: 'Invalid role' });
         }
 
         if (users.find(u => u.username === username)) {
@@ -76,17 +80,18 @@ app.post('/api/register', async (req, res) => {
             id: uuidv4(),
             username,
             password: hashedPassword,
+            role,
             createdAt: new Date().toISOString()
         };
 
         users.push(newUser);
         req.session.userId = newUser.id;
-        
-        console.log('User registered:', { id: newUser.id, username: newUser.username });
+        req.session.role = newUser.role;
         
         res.json({ 
             id: newUser.id, 
             username: newUser.username,
+            role: newUser.role,
             createdAt: newUser.createdAt
         });
     } catch (error) {
@@ -105,12 +110,12 @@ app.post('/api/login', async (req, res) => {
         }
 
         req.session.userId = user.id;
-        
-        console.log('User logged in:', { id: user.id, username: user.username });
+        req.session.role = user.role;
         
         res.json({ 
             id: user.id, 
             username: user.username,
+            role: user.role,
             createdAt: user.createdAt
         });
     } catch (error) {
@@ -124,22 +129,35 @@ app.post('/api/logout', (req, res) => {
     res.json({ message: 'Logged out successfully' });
 });
 
+const requireEditor = (req, res, next) => {
+    if (!req.session.userId || req.session.role !== 'editor') {
+        return res.status(403).json({ error: 'Unauthorized: Editor access required' });
+    }
+    next();
+};
+
 // Message routes
-app.get('/api/messages', (req, res) => {
+app.get('/api/posts', (req, res) => {
     try {
-        res.json(messages);
+        const publicPosts = posts.map(post => ({
+            ...post,
+            content: post.published ? post.content : 'This post is not published yet.'
+        })).filter(post => post.published || 
+            (req.session.userId && req.session.role === 'editor'));
+        
+        res.json(publicPosts);
     } catch (error) {
-        console.error('Error in GET /api/messages:', error);
+        console.error('Error in GET /api/posts:', error);
         res.status(500).json({ error: 'Server error' });
     }
 });
 
-app.post('/api/messages', requireAuth, (req, res) => {
+app.post('/api/posts', requireEditor, (req, res) => {
     try {
-        const { content } = req.body;
+        const { title, content, published = false } = req.body;
 
-        if (!content) {
-            return res.status(400).json({ error: 'Content is required' });
+        if (!title || !content) {
+            return res.status(400).json({ error: 'Title and content are required' });
         }
 
         const user = users.find(u => u.id === req.session.userId);
@@ -147,55 +165,75 @@ app.post('/api/messages', requireAuth, (req, res) => {
             return res.status(401).json({ error: 'User not found' });
         }
 
-        const newMessage = {
+        const newPost = {
             id: uuidv4(),
+            title,
             content,
+            published,
             userId: user.id,
-            username: user.username,
+            authorName: user.username,
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString()
         };
 
-        messages.unshift(newMessage);
-        
-        if (messages.length > 100) {
-            messages.pop();
-        }
-
-        res.json(newMessage);
+        posts.unshift(newPost);
+        res.json(newPost);
     } catch (error) {
-        console.error('Error in POST /api/messages:', error);
+        console.error('Error in POST /api/posts:', error);
         res.status(500).json({ error: 'Server error' });
     }
 });
 
-app.put('/api/messages/:id', requireAuth, (req, res) => {
+app.put('/api/posts/:id', requireEditor, (req, res) => {
     try {
         const { id } = req.params;
-        const { content } = req.body;
+        const { title, content, published } = req.body;
 
-        if (!content) {
-            return res.status(400).json({ error: 'Content is required' });
+        if (!title || !content) {
+            return res.status(400).json({ error: 'Title and content are required' });
         }
 
-        const messageIndex = messages.findIndex(m => m.id === id);
-        if (messageIndex === -1) {
-            return res.status(404).json({ error: 'Message not found' });
+        const postIndex = posts.findIndex(p => p.id === id);
+        if (postIndex === -1) {
+            return res.status(404).json({ error: 'Post not found' });
         }
 
-        if (messages[messageIndex].userId !== req.session.userId) {
-            return res.status(403).json({ error: 'Unauthorized to edit this message' });
+        if (posts[postIndex].userId !== req.session.userId) {
+            return res.status(403).json({ error: 'Unauthorized to edit this post' });
         }
 
-        messages[messageIndex] = {
-            ...messages[messageIndex],
+        posts[postIndex] = {
+            ...posts[postIndex],
+            title,
             content,
+            published,
             updatedAt: new Date().toISOString()
         };
 
-        res.json(messages[messageIndex]);
+        res.json(posts[postIndex]);
     } catch (error) {
-        console.error('Error in PUT /api/messages/:id:', error);
+        console.error('Error in PUT /api/posts/:id:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+app.delete('/api/posts/:id', requireEditor, (req, res) => {
+    try {
+        const { id } = req.params;
+        const postIndex = posts.findIndex(p => p.id === id);
+        
+        if (postIndex === -1) {
+            return res.status(404).json({ error: 'Post not found' });
+        }
+
+        if (posts[postIndex].userId !== req.session.userId) {
+            return res.status(403).json({ error: 'Unauthorized to delete this post' });
+        }
+
+        posts.splice(postIndex, 1);
+        res.json({ message: 'Post deleted successfully' });
+    } catch (error) {
+        console.error('Error in DELETE /api/posts/:id:', error);
         res.status(500).json({ error: 'Server error' });
     }
 });

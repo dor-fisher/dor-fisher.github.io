@@ -1,41 +1,22 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Message Board</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script defer src="script.js"></script>
+    <title>Blog Login</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
-    <div class="header">
-        <h1>Message Board</h1>
-        <!-- Auth Container -->
-        <div id="authContainer" class="auth-container">
-            <!-- Show when logged out -->
-            <div id="loggedOutView" class="auth-buttons">
-                <button onclick="showAuthModal('login')" class="auth-btn" data-action="login">Login</button>
-                <button onclick="showAuthModal('register')" class="auth-btn" data-action="register">Register</button>
+    <div class="container">
+        <div class="auth-form-container">
+            <h1>Welcome to Our Blog</h1>
+            <div class="auth-tabs">
+                <button onclick="switchForm('login')" class="tab active">Login</button>
+                <button onclick="switchForm('register')" class="tab">Register</button>
             </div>
-            <!-- Show when logged in -->
-            <div id="loggedInView" class="auth-user hidden">
-                <span id="userGreeting"></span>
-                <button onclick="handleLogout()" class="auth-btn">Logout</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Auth Modal -->
-    <div id="authModal" class="modal hidden">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeAuthModal()">&times;</span>
-
-            <!-- Login Form -->
-            <form id="loginForm" class="auth-form hidden">
-                <h2>Login</h2>
+            
+            <form id="loginForm" class="auth-form">
                 <div class="form-group">
                     <label for="loginUsername">Username:</label>
                     <input type="text" id="loginUsername" required>
@@ -45,12 +26,9 @@
                     <input type="password" id="loginPassword" required>
                 </div>
                 <button type="submit">Login</button>
-                <p>Don't have an account? <a href="#" onclick="switchAuthForm('register')">Register</a></p>
             </form>
 
-            <!-- Register Form -->
             <form id="registerForm" class="auth-form hidden">
-                <h2>Register</h2>
                 <div class="form-group">
                     <label for="registerUsername">Username:</label>
                     <input type="text" id="registerUsername" required>
@@ -60,54 +38,22 @@
                     <input type="password" id="registerPassword" required>
                 </div>
                 <div class="form-group">
-                    <label for="confirmPassword">Confirm Password:</label>
-                    <input type="password" id="confirmPassword" required>
+                    <label for="role">Role:</label>
+                    <select id="role" required>
+                        <option value="reader">Reader</option>
+                        <option value="editor">Editor</option>
+                    </select>
                 </div>
                 <button type="submit">Register</button>
-                <p>Already have an account? <a href="#" onclick="switchAuthForm('login')">Login</a></p>
             </form>
         </div>
     </div>
-
-    <!-- Message Board Container -->
-    <div class="container">
-        <!-- Form Column -->
-        <div class="form-section">
-            <h3>Create New Message</h3>
-            <form id="messageForm" class="hidden">
-                <label for="messageContent">Message:</label>
-                <textarea name="content" id="messageContent" rows="4" placeholder="Enter your message here..."
-                    required></textarea>
-                <button type="submit">Post Message</button>
-            </form>
-            <div id="loginPrompt" class="login-prompt">
-                Please login to post messages
-            </div>
-        </div>
-
-        <!-- Messages Column -->
-        <div class="messages">
-            <h3>Messages</h3>
-            <div id="messagesList" class="messages-list">
-                <!-- Messages will be inserted here -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Message Edit Modal -->
-    <div id="editModal" class="modal hidden">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeEditModal()">&times;</span>
-            <h2>Edit Message</h2>
-            <form id="editForm">
-                <textarea id="editContent" required></textarea>
-                <button type="submit">Save Changes</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Toast Notifications -->
     <div id="toast" class="toast hidden"></div>
-</body>
 
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/login.js"></script>
+</body>
 </html>
+
